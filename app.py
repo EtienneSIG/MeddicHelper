@@ -16,7 +16,7 @@ from utils import *
 
 # Configuration de la page
 st.set_page_config(
-    page_title="MEDDIC HELPER",
+    page_title="MEDDIC CRM",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -317,7 +317,7 @@ def main():
     db = init_database()
     
     # Sidebar pour la navigation
-    st.sidebar.title("🎯 MEDDIC CRM")
+    st.sidebar.title("🎯 MEDDIC Helper")
     
     # Affichage des statistiques rapides dans la sidebar
     try:
@@ -938,11 +938,31 @@ def show_all_fiches(db):
                 if fiche['identify_pain']:
                     st.markdown("**🎯 Pain Points:**")
                     st.write(fiche['identify_pain'][:200] + "..." if len(fiche['identify_pain']) > 200 else fiche['identify_pain'])
-            
             with col2:
-                if st.button(f"✏️ Éditer", key=f"edit_{fiche['id']}"):
-                    st.session_state.edit_fiche_id = fiche['id']
-                    st.rerun()                # Génération PDF
+                # Boutons d'action
+                btn_col1, btn_col2 = st.columns(2)
+                
+                with btn_col1:
+                    if st.button(f"✏️ Éditer", key=f"edit_{fiche['id']}"):
+                        st.session_state.edit_fiche_id = fiche['id']
+                        st.rerun()
+                
+                with btn_col2:
+                    # Bouton de suppression avec confirmation
+                    delete_key = f"delete_{fiche['id']}"
+                    confirm_key = f"confirm_delete_{fiche['id']}"
+                    
+                    if st.button(f"🗑️ Supprimer", key=delete_key, type="secondary"):
+                        if st.session_state.get(confirm_key):
+                            db.delete_fiche(fiche['id'])
+                            st.success(f"✅ Fiche '{fiche['company']}' supprimée avec succès !")
+                            st.session_state[confirm_key] = False
+                            st.rerun()
+                        else:
+                            st.session_state[confirm_key] = True
+                            st.warning("⚠️ Cliquez à nouveau pour confirmer la suppression")
+                
+                # Génération PDF
                 pdf_generator = MEDDICPDFGenerator()
                 try:
                     # Récupérer les données PDF (maintenant sous forme de bytes)
