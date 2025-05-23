@@ -1,4 +1,4 @@
-# 🎯 MEDDIC CRM - Application Streamlit
+# 🎯 MEDDIC HELPER - Application Streamlit
 
 Une application web interactive pour préparer, suivre et analyser les rendez-vous clients selon la méthodologie MEDDIC.
 
