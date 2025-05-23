@@ -16,7 +16,7 @@ from utils import *
 
 # Configuration de la page
 st.set_page_config(
-    page_title="MEDDIC CRM",
+    page_title="MEDDIC HELPER",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
